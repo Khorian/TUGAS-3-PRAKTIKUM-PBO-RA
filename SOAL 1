@@ -1,0 +1,85 @@
+from math import log  # Mengimpor fungsi log dari modul math
+from abc import ABC, abstractmethod  # Mengimpor ABC dan abstractmethod untuk abstraksi
+
+class Calculator(ABC):
+    """Kelas abstrak sebagai blueprint untuk kalkulator"""
+    
+    @abstractmethod
+    def __add__(self, other):  # Metode abstrak untuk penjumlahan
+        pass
+    
+    @abstractmethod
+    def __sub__(self, other):  # Metode abstrak untuk pengurangan
+        pass
+    
+    @abstractmethod
+    def __mul__(self, other):  # Metode abstrak untuk perkalian
+        pass
+    
+    @abstractmethod
+    def __truediv__(self, other):  # Metode abstrak untuk pembagian
+        pass
+    
+    @abstractmethod
+    def __pow__(self, other):  # Metode abstrak untuk eksponen
+        pass
+    
+    @abstractmethod
+    def log(self, base):  # Metode abstrak untuk logaritma
+        pass
+
+class SimpleCalculator(Calculator):
+    """Implementasi kalkulator dengan Dunder Methods"""
+    
+    def __init__(self, value):  # Konstruktor untuk inisialisasi nilai
+        self.value = value
+
+    def __add__(self, other):  # Implementasi penjumlahan
+        return SimpleCalculator(self.value + other.value)
+    
+    def __sub__(self, other):  # Implementasi pengurangan
+        return SimpleCalculator(self.value - other.value)
+    
+    def __mul__(self, other):  # Implementasi perkalian
+        return SimpleCalculator(self.value * other.value)
+    
+    def __truediv__(self, other):  # Implementasi pembagian
+        if other.value == 0:
+            raise ValueError("Tidak bisa membagi dengan nol!")  # Validasi pembagian dengan nol
+        return SimpleCalculator(self.value / other.value)
+    
+    def __pow__(self, other):  # Implementasi eksponen
+        return SimpleCalculator(self.value ** other.value)
+    
+    def log(self, base):  # Implementasi logaritma
+        if self.value <= 0 or base <= 0 or base == 1:
+            raise ValueError("Nilai dan basis log harus lebih besar dari 0 dan basis tidak boleh 1")  # Validasi nilai log
+        return SimpleCalculator(log(self.value, base))
+    
+    def __repr__(self):  # Metode untuk menampilkan hasil
+        return f"Hasil: {self.value}"
+
+# Input dari pengguna
+val1 = float(input("Masukkan angka pertama: "))  # Meminta input angka pertama dari pengguna
+val2 = float(input("Masukkan angka kedua: "))  # Meminta input angka kedua dari pengguna
+operator = input("Masukkan operasi (+, -, *, /, ^, log): ")  # Meminta input operasi
+
+# Membuat objek kalkulator
+num1 = SimpleCalculator(val1)
+num2 = SimpleCalculator(val2)
+
+# Mengeksekusi operasi berdasarkan input pengguna
+if operator == '+':
+    print(num1 + num2)  # Penjumlahan
+elif operator == '-':
+    print(num1 - num2)  # Pengurangan
+elif operator == '*':
+    print(num1 * num2)  # Perkalian
+elif operator == '/':
+    print(num1 / num2)  # Pembagian
+elif operator == '^':
+    print(num1 ** num2)  # Eksponen
+elif operator == 'log':
+    print(num1.log(val2))  # Logaritma dengan basis val2
+else:
+    print("Operator tidak valid!")  # Menampilkan pesan jika operator tidak dikenali

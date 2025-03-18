@@ -1,0 +1,65 @@
+import random
+
+# Kelas Father merepresentasikan ayah dan menyimpan alel golongan darahnya
+class Father:
+    def __init__(self, blood_types):
+        self.blood_types = blood_types  # Properti untuk menyimpan dua alel golongan darah ayah
+
+# Kelas Mother merepresentasikan ibu dan menyimpan alel golongan darahnya
+class Mother:
+    def __init__(self, blood_types):
+        self.blood_types = blood_types  # Properti untuk menyimpan dua alel golongan darah ibu
+
+# Kelas Child menentukan golongan darah anak berdasarkan alel dari kedua orang tua
+class Child:
+    def __init__(self, father, mother):
+        # Memilih salah satu alel secara acak dari ayah
+        allele_from_father = random.choice(father.blood_types)
+        # Memilih salah satu alel secara acak dari ibu
+        allele_from_mother = random.choice(mother.blood_types)
+        
+        # Menyimpan pasangan alel anak
+        self.blood_types = (allele_from_father, allele_from_mother)
+        
+        # Menentukan golongan darah berdasarkan kombinasi alel
+        self.blood_group = self.determine_blood_group()
+    
+    def determine_blood_group(self):
+        """
+        Fungsi untuk menentukan golongan darah berdasarkan kombinasi alel:
+        - A + A -> A
+        - A + O -> A
+        - A + B -> AB
+        - B + B -> B
+        - B + O -> B
+        - O + O -> O
+        """
+        alleles = set(self.blood_types)  # Mengonversi pasangan alel menjadi set agar mudah dibandingkan
+        
+        # Logika penentuan golongan darah berdasarkan kombinasi alel
+        if alleles == {'A', 'A'} or alleles == {'A', 'O'}:
+            return 'A'  # Jika kombinasi A-A atau A-O, maka golongan darahnya A
+        elif alleles == {'B', 'B'} or alleles == {'B', 'O'}:
+            return 'B'  # Jika kombinasi B-B atau B-O, maka golongan darahnya B
+        elif alleles == {'A', 'B'}:
+            return 'AB' # Jika kombinasi A-B, maka golongan darahnya AB
+        else:
+            return 'O'  # Jika kombinasi O-O, maka golongan darahnya O
+
+# Meminta pengguna untuk memasukkan alel golongan darah ayah
+father_blood = tuple(input("Masukkan alel golongan darah ayah (contoh: A O): ").split())
+# Meminta pengguna untuk memasukkan alel golongan darah ibu
+mother_blood = tuple(input("Masukkan alel golongan darah ibu (contoh: B O): ").split())
+
+# Membuat objek ayah dengan alel yang telah dimasukkan pengguna
+father = Father(father_blood)
+# Membuat objek ibu dengan alel yang telah dimasukkan pengguna
+mother = Mother(mother_blood)
+
+# Membuat objek anak berdasarkan pewarisan alel dari ayah dan ibu
+child = Child(father, mother)
+
+# Menampilkan alel yang diwarisi anak
+print(f"Alel anak: {child.blood_types}")
+# Menampilkan golongan darah anak berdasarkan kombinasi alel
+print(f"Golongan darah anak: {child.blood_group}")
